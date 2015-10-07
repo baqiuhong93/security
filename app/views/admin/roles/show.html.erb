@@ -1,0 +1,62 @@
+<%= render :partial => '/admin/public/actions' %>
+<table class="table table-bordered">
+	<tr>
+		<td width="15%" style="text-align:right;"><strong>用户名:</strong></td><td><%= @user.name %></td>
+	</tr>
+	<tr>
+		<td style="text-align:right;"><strong>角色:</strong></td>
+		<td>
+			<div class="tabbable">
+				<ul class="nav nav-tabs">
+				<li class="active"><a href="#tab1" data-toggle="tab">网络课堂</a></li>
+				<li><a href="#tab2" data-toggle="tab">权限平台</a></li>
+				</ul>
+				<div class="tab-content">
+				<div class="tab-pane active" id="tab1">
+					<% roles = Role.where("app_id = ?", 1) %>
+					<% Role.get_menus(1).each do |menu| %>
+					<ul class="nav nav-list">
+					  <li class="nav-header"><%= menu['name'] %></li>
+					  <ul class="inline">
+						<% roles.each do |role| %>
+							<% if role.menu_id == menu['id'] %>
+								<li id="user_roles_<%=role.id %>" style="display:none;"><%=role.name %></li>
+							<% end %>
+						<% end %>
+					  </ul>
+					</ul>
+					<% end %>
+				</div>
+				<div class="tab-pane" id="tab2">
+					<% roles = Role.where("app_id = ?", 2) %>
+					<% Role.get_menus(2).each do |menu| %>
+					<ul class="nav nav-list">
+					  <li class="nav-header"><%= menu['name'] %></li>
+					  <ul class="inline">
+						<% roles.each do |role| %>
+							<% if role.menu_id == menu['id'] %>
+								<li id="user_roles_<%=role.id %>" style="display:none;"><%=role.name %></li>
+							<% end %>
+						<% end %>
+					  </ul>
+					</ul>
+					<% end %>
+				</div>
+				</div>
+				</div>
+			</td>
+	</tr>
+</table>
+ <br>
+
+
+
+<%= content_for :javascripts do -%>
+<script type="text/javascript" charset="utf-8">
+$(function() {
+	<% @user.user_roles.each do |role_group| %>
+	$('#user_roles_<%= role_group.role_id %>').show();
+	<% end %>
+});
+</script>	
+<% end -%>

@@ -1,0 +1,59 @@
+<%= render :partial => '/admin/public/actions' %>
+<table class="table table-bordered">
+	<tr>
+		<td width="15%" style="text-align:right;"><strong>用户名:</strong></strong></td><td><%= @user.name %></td>
+	</tr>
+	<tr>
+		<td width="15%" style="text-align:right;"><strong>邮箱:</strong></strong></td><td><%= @user.email %></td>
+	</tr>
+	<tr>
+		<td width="15%" style="text-align:right;"><strong>重置密码时间:</strong></strong></td><td><%= format_date(@user.reset_password_sent_at) %></td>
+	</tr>
+	<tr>
+		<td width="15%" style="text-align:right;"><strong>登录次数:</strong></strong></td><td><%= @user.sign_in_count %></td>
+	</tr>
+	<tr>
+		<td width="15%" style="text-align:right;"><strong>最近登录时间:</strong></strong></td><td><%= format_date @user.current_sign_in_at %></td>
+	</tr>
+	<tr>
+		<td width="15%" style="text-align:right;"><strong>最近登录IP:</strong></strong></td><td><%= @user.current_sign_in_ip %></td>
+	</tr>
+	<tr>
+		<td width="15%" style="text-align:right;"><strong>最后一次登录时间:</strong></strong></td><td><%= format_date @user.last_sign_in_at %></td>
+	</tr>
+	<tr>
+		<td width="15%" style="text-align:right;"><strong>最后一次登录IP:</strong></strong></td><td><%= @user.last_sign_in_ip %></td>
+	</tr>
+	<tr>
+		<td width="15%" style="text-align:right;"><strong>状态:</strong></strong></td><td><%= @user.status %></td>
+	</tr>
+	<tr>
+		<td width="15%" style="text-align:right;"><strong>创建时间:</strong></strong></td><td><%= format_date @user.created_at %></td>
+	</tr>
+	<tr>
+		<td width="15%" style="text-align:right;"><strong>修改时间:</strong></strong></td><td><%= format_date @user.updated_at %></td>
+	</tr>
+	<tr>
+		<td width="15%" style="text-align:right;"><strong>失败尝试次数:</strong></strong></td><td><%= @user.failed_attempts %></td>
+	</tr>
+	<tr>
+		<td width="15%" style="text-align:right;"><strong>锁定时间:</strong></strong></td><td><%= @user.locked_at %></td>
+	</tr>
+	<tr>
+		<td colspan="2" style="text-align:center;"><a href="#" class="btn" onclick="reset_pwd('<%= @user.id %>')">重置密码</a></td>
+	</tr>
+</table>
+
+<%= content_for :javascripts do -%>
+<script type="text/javascript">
+	function reset_pwd(user_id){
+		$.post('/admin/users/'+user_id+'/reset_pwd.json', {}, function(data) {
+			if(data.status == 'success') {
+				alert("密码：" + data.password);
+			} else {
+				alert("密码修改失败！");
+			}	
+		});
+	}
+</script>
+<% end -%>

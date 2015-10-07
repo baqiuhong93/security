@@ -1,0 +1,9 @@
+<%= simple_form_for @user, :url => (@user.id.present? ? admin_user_path(@user) : admin_users_path), :html => { :class => 'form-horizontal', :multipart => true, :onsubmit => 'return valid_product_form();' } do |f| %>
+  	<%= f.input :name, label: '名称：', required: true, :readonly => true %>
+  	<%= f.input :last_name, label: '姓名：', required: true %>
+	<%= f.input :email, label: 'Email：', required: true %>
+	<div class="form-actions">
+    <%= f.button :submit, :class => 'btn-primary' %>
+    <%= link_to '取消', admin_users_path, :class => 'btn' %>
+  </div>
+<% end -%> 

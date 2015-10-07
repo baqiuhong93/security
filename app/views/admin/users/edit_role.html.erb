@@ -1,0 +1,87 @@
+<%= form_for @user, :url => update_role_admin_user_path(@user), :html => { :class => 'form-horizontal', :method => :post } do |f| %>
+<%= f.hidden_field :id %>
+<div class="control-group">
+    <label class="control-label">用户名：</label>
+    <div class="controls">
+		<%= @user.name %>
+    </div>
+</div>
+<div class="control-group">
+    <label class="control-label" for="inputEmail">角色：</label>
+    <div class="controls">
+		<div class="tabbable"> <!-- Only required for left/right tabs -->
+		  <ul class="nav nav-tabs">
+		    <li class="active"><a href="#tab1" data-toggle="tab">网络课堂</a></li>
+		    <li><a href="#tab2" data-toggle="tab">权限平台</a></li>
+		    <li><a href="#tab3" data-toggle="tab">资讯平台</a></li>
+		  </ul>
+		  <div class="tab-content">
+		    <div class="tab-pane active" id="tab1">
+				<% roles = Role.where("app_id = ?", 1) %>
+				<% Role.get_menus(1).each do |menu| %>
+				<ul class="nav nav-list">
+				  <li class="nav-header"><%= menu['name'] %></li>
+				  <ul class="inline">
+					<% roles.each do |role| %>
+						<% 
+						puts role.menu_id
+						if role.menu_id == menu['id'] %>
+							<li><input id="user_roles_<%=role.id %>" name="user_roles[]" type="checkbox" value="<%=role.id %>" /> <%=role.name %></li>
+						<% end %>
+					<% end %>
+				  </ul>
+				</ul>
+				<% end %>
+		    </div>
+		    <div class="tab-pane" id="tab2">
+				<% roles = Role.where("app_id = ?", 2) %>
+				<% Role.get_menus(2).each do |menu| %>
+				<ul class="nav nav-list">
+				  <li class="nav-header"><%= menu['name'] %></li>
+				  <ul class="inline">
+					<% roles.each do |role| %>
+						<% if role.menu_id == menu['id'] %>
+							<li><input id="user_roles_<%=role.id %>" name="user_roles[]" type="checkbox" value="<%=role.id %>" /> <%=role.name %></li>
+						<% end %>
+					<% end %>
+				  </ul>
+				</ul>
+				<% end %>
+		    </div>
+		    <div class="tab-pane" id="tab3">
+				<% roles = Role.where("app_id = ?", 3) %>
+				<% Role.get_menus(3).each do |menu| %>
+				<ul class="nav nav-list">
+				  <li class="nav-header"><%= menu['name'] %></li>
+				  <ul class="inline">
+					<% roles.each do |role| %>
+						<% if role.menu_id == menu['id'] %>
+							<li><input id="user_roles_<%=role.id %>" name="user_roles[]" type="checkbox" value="<%=role.id %>" /> <%=role.name %></li>
+						<% end %>
+					<% end %>
+				  </ul>
+				</ul>
+				<% end %>
+		    </div>
+		  </div>
+		</div>
+    </div>
+  </div>
+  <div class="control-group">
+      <div class="controls">
+	      <%= f.button :submit, :class => 'btn btn-primary' %>
+	      <%= link_to '取消', admin_users_path, :class => 'btn' %>
+      </div>
+    </div>
+    
+  </div>
+<% end -%> 
+<%= content_for :javascripts do -%>
+<script type="text/javascript" charset="utf-8">
+$(function() {
+	<% @user.user_roles.each do |role_group| %>
+	$('#user_roles_<%= role_group.role_id %>').attr('checked',true);
+	<% end %>
+});
+</script>	
+<% end -%>
